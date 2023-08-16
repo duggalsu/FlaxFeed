@@ -38,15 +38,12 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.enceptcode.badgeview.BadgeView
+import com.enceptcode.badgeview.BadgeFactory
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.fragment_entries.coordinator
-import kotlinx.android.synthetic.main.fragment_entries.refresh_layout
-import kotlinx.android.synthetic.main.fragment_entries.toolbar
-import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
@@ -61,8 +58,6 @@ import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.share
-import q.rorbin.badgeview.Badge
-import q.rorbin.badgeview.QBadgeView
 import java.util.*
 
 
@@ -128,7 +123,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
     private var entryIdsLiveData: LiveData<List<String>>? = null
     private var entryIds: List<String>? = null
     private var newCountLiveData: LiveData<Long>? = null
-    private var unreadBadge: Badge? = null
+    private var unreadBadge: BadgeView? = null
     private var searchText: String? = null
     private val searchHandler = Handler()
     private var isDesc: Boolean = true
@@ -174,12 +169,16 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         toolbar.setNavigationContentDescription(R.string.navigation_button_content_description)
         toolbar.setNavigationOnClickListener { (activity as MainActivity).toggleDrawer() }
 
+        // TODO: modify
+        unreadBadge = BadgeFactory.createCircle(MainActivity.this);
+        // TODO: replace this
+        /**
         unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
             setGravityOffset(35F, 0F, true)
             isShowShadow = false
             badgeBackgroundColor = requireContext().colorAttr(R.attr.colorUnreadBadgeBackground)
             badgeTextColor = requireContext().colorAttr(R.attr.colorUnreadBadgeText)
-        }
+        } **/
 
         read_all_fab.onClick { _ ->
             entryIds?.let { entryIds ->
@@ -551,8 +550,6 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
-        inflater.inflate(R.menu.menu_fragment_entries, menu)
 
         menu.findItem(R.id.menu_entries__share).isVisible = bottom_navigation.selectedItemId == R.id.favorites
 

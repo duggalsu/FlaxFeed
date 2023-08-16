@@ -33,11 +33,10 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_entry_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
+import net.fred.feedex.databinding.FragmentEntryDetailsNoswipeBinding
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
@@ -101,17 +100,25 @@ class EntryDetailsFragment : Fragment() {
     private var isMobilizing = false
     private var preferFullText = true
 
+    private var _binding: FragmentEntryDetailsBinding? = null
+    private var _binding2: FragmentEntryDetailsNoswipeBindingBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return if (defaultSharedPreferences.getBoolean(ENABLE_SWIPE_ENTRY, true)) {
-            inflater.inflate(R.layout.fragment_entry_details, container, false)
+            _binding = FragmentEntryDetailsBinding.inflate(R.layout.fragment_entry_details, container, false)
         } else {
-            inflater.inflate(R.layout.fragment_entry_details_noswipe, container, false)
+            _binding2 = FragmentEntryDetailsNoswipeBindingBinding.inflate(R.layout.fragment_entry_details_noswipe, container, false)
         }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
+        _binding2 = null
         entry_view.destroy()
     }
 

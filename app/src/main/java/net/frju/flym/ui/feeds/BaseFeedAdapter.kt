@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder
-import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount

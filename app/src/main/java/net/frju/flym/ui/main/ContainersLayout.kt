@@ -34,7 +34,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
-import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.utils.onLaidOut
 

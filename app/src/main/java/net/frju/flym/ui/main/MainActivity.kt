@@ -38,10 +38,6 @@ import com.rometools.opml.feed.opml.Outline
 import com.rometools.opml.io.impl.OPML20Generator
 import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
-import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.view_main_drawer_header.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -91,11 +87,15 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
 
         super.onCreate(savedInstanceState)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(R.layout.activity_main)
 
         more.onClick {

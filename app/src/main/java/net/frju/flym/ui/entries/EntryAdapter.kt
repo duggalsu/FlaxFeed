@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
-import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed

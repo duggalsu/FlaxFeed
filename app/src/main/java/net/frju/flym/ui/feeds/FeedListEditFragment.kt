@@ -29,7 +29,6 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -42,8 +41,14 @@ class FeedListEditFragment : Fragment() {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = EditFeedAdapter(feedGroups)
 
+    private var _binding: ResultProfileBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
+        _binding = ResultProfileBinding.inflate(R.layout.fragment_feed_list_edit, container, false)
+        val view = binding.root
 
         view.feedsList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -107,6 +112,11 @@ class FeedListEditFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
