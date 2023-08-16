@@ -48,7 +48,7 @@ class FeedGroup(val feedWithCount: FeedWithCount, val subFeeds: List<FeedWithCou
     }
 
     fun getEntryCountString(): String {
-        val entryCount = if (subFeeds.isNotEmpty()) subFeeds.sumBy { it.entryCount } else feedWithCount.entryCount
+        val entryCount = if (subFeeds.isNotEmpty()) subFeeds.sumOf { it.entryCount } else feedWithCount.entryCount
         return if (entryCount > 0) entryCount.toString() else ""
     }
 }

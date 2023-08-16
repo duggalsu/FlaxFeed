@@ -170,7 +170,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         toolbar.setNavigationOnClickListener { (activity as MainActivity).toggleDrawer() }
 
         // TODO: modify
-        unreadBadge = BadgeFactory.createCircle(MainActivity.this);
+        // unreadBadge = BadgeFactory.createCircle(MainActivity.this);
         // TODO: replace this
         /**
         unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {

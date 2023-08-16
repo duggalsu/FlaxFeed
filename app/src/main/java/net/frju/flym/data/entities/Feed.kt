@@ -26,7 +26,7 @@ import androidx.room.PrimaryKey
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 val DELIMITERS = arrayOf(" ", "-", "&", ":", "|")
@@ -81,7 +81,7 @@ data class Feed(
                 else -> split[0][0].toString()
             }
 
-            return letters.toUpperCase()
+            return letters.uppercase()
         }
     }
 
