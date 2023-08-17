@@ -36,6 +36,7 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
@@ -56,7 +57,6 @@ import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.uiThread
 import org.jetbrains.annotations.NotNull
 
 
@@ -220,7 +220,7 @@ class EntryDetailsFragment : Fragment() {
                 if (isMobilizing) {
                     CoroutineScope(Dispatchers.IO).async {
                         App.db.entryDao().findByIdWithFeed(entryId)?.let { newEntry ->
-                            uiThread {
+                            withContext(Dispatchers.Main) {
                                 entryWithFeed = newEntry
                                 entry_view.setEntry(entryWithFeed, true)
 
@@ -363,7 +363,7 @@ class EntryDetailsFragment : Fragment() {
                 preferFullText = feed?.retrieveFullText ?: true
                 isMobilizing = false
 
-                uiThread {
+                withContext(Dispatchers.Main) {
                     entry_view.setEntry(entryWithFeed, preferFullText)
 
                     initDataObservers()

@@ -41,6 +41,7 @@ import com.rometools.rome.io.WireFeedOutput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -532,7 +533,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     val fixedReader = StringReader(content.replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
                     parseOpml(fixedReader)
                 } catch (e: Exception) {
-                    uiThread { toast(R.string.cannot_find_feeds) }
+                    withContext(Dispatchers.Main) { toast(R.string.cannot_find_feeds) }
                 }
             }
         }
@@ -545,11 +546,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                        uiThread { toast(String.format(getString(R.string.message_exported_to), fileName)) }
+                        withContext(Dispatchers.Main) { toast(String.format(getString(R.string.message_exported_to), fileName)) }
                     }
                 }
             } catch (e: Exception) {
-                uiThread { toast(R.string.error_feed_export) }
+                withContext(Dispatchers.Main) { toast(R.string.error_feed_export) }
             }
         }
     }

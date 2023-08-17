@@ -33,6 +33,7 @@ import androidx.core.content.FileProvider.getUriForFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
@@ -42,7 +43,6 @@ import net.frju.flym.utils.UTF8
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.colorAttr
-import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.IOException
 
@@ -138,7 +138,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
                 val displayImages = context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)
                 contentText = if (displayImages) HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id) else contentText.replace(HTML_IMG_REGEX.toRegex(), "")
 
-                uiThread {
+                withContext(Dispatchers.Main) {
                     if (displayImages) {
                         if (settings.blockNetworkImage) {
                             // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards

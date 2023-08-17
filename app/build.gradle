@@ -13,7 +13,7 @@ androidExtensions {
  **/
 
 android {
-    compileSdkVersion 30
+    compileSdk 30
     defaultConfig {
         applicationId "net.frju.flym"
         minSdkVersion 21

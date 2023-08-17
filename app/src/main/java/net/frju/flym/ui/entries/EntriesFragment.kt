@@ -44,6 +44,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
@@ -109,7 +113,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                     }
                 }
 
-                doAsync {
+                CoroutineScope(Dispatchers.IO).async {
                     if (entryWithFeed.entry.favorite) {
                         App.db.entryDao().markAsFavorite(entryWithFeed.entry.id)
                     } else {
@@ -183,7 +187,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         read_all_fab.onClick { _ ->
             entryIds?.let { entryIds ->
                 if (entryIds.isNotEmpty()) {
-                    doAsync {
+                    CoroutineScope(Dispatchers.IO).async {
                         // TODO check if limit still needed
                         entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
                             App.db.entryDao().markAsRead(it)
@@ -193,13 +197,13 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                     Snackbar
                             .make(coordinator, R.string.marked_as_read, Snackbar.LENGTH_LONG)
                             .setAction(R.string.undo) { _ ->
-                                doAsync {
+                                CoroutineScope(Dispatchers.IO).async {
                                     // TODO check if limit still needed
                                     entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
                                         App.db.entryDao().markAsUnread(it)
                                     }
 
-                                    uiThread {
+                                    withContext(Dispatchers.Main) {
                                         // we need to wait for the list to be empty before displaying the new items (to avoid scrolling issues)
                                         listDisplayDate = Date().time
                                         initDataObservers()
@@ -443,7 +447,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 adapter.currentList?.get(viewHolder.adapterPosition)?.let { entryWithFeed ->
                     entryWithFeed.entry.read = !entryWithFeed.entry.read
-                    doAsync {
+                    CoroutineScope(Dispatchers.IO).async {
                         val snackbarMessage: Int
                         if (entryWithFeed.entry.read) {
                             App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
@@ -456,7 +460,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                         Snackbar
                                 .make(coordinator, snackbarMessage, Snackbar.LENGTH_LONG)
                                 .setAction(R.string.undo) { _ ->
-                                    doAsync {
+                                    CoroutineScope(Dispatchers.IO).async {
                                         if (entryWithFeed.entry.read) {
                                             App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
                                         } else {
@@ -474,12 +478,12 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                                     show()
                                 }
 
-                        uiThread {
+                        withContext(Dispatchers.Main) {
                             showNavigationIfRecyclerViewCannotScroll()
                         }
 
                         if (bottom_navigation.selectedItemId != R.id.unreads) {
-                            uiThread {
+                            withContext(Dispatchers.Main) {
                                 adapter.notifyItemChanged(viewHolder.adapterPosition)
                             }
                         }

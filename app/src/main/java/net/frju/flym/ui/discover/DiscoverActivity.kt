@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -22,7 +23,6 @@ import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onEditorAction
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.uiThread
 import java.util.Timer
 import java.util.TimerTask
 
@@ -139,7 +139,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         CoroutineScope(Dispatchers.IO).async {
             val feedToAdd = Feed(link = link, title = title)
             App.db.feedDao().insert(feedToAdd)
-            uiThread {
+            withContext(Dispatchers.Main) {
                 view.snackbar(R.string.feed_added)
             }
         }

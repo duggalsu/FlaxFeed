@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.GlideApp
@@ -27,7 +28,6 @@ import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntryAdapter
 import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.uiThread
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -126,7 +126,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                                     Log.d(TAG, feedResult.toString())
                                     array.add(feedResult)
                                 }
-                                uiThread {
+                                withContext(Dispatchers.Main) {
                                     (resultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
                                 }
 
