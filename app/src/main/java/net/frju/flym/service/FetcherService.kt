@@ -104,7 +104,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
 
             // Connectivity issue, we quit
-            if (!context.isOnline()) {
+            if (!context.isOnline(context)) {
                 return
             }
 
@@ -570,7 +570,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         val isFromAutoRefresh = intent.getBooleanExtra(FROM_AUTO_REFRESH, false)
 
         // Connectivity issue, we quit
-        if (!isOnline()) {
+        if (!isOnline(context)) {
             if (ACTION_REFRESH_FEEDS == intent.action && !isFromAutoRefresh) {
                 // Display a toast in that case
                 handler.post { toast(R.string.network_error).show() }

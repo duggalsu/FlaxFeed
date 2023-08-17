@@ -69,7 +69,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
         when (action) {
             MotionEvent.ACTION_DOWN -> {
                 startPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
-                        ?: childCount - 1
+                    ?: (childCount - 1)
                 if (startPosition != NO_POSITION) {
                     val mItemPosition = startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                     dragPointOffset = y - getChildAt(mItemPosition).top
@@ -82,7 +82,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 dragMode = false
                 val endPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
-                        ?: childCount - 1
+                    ?: (childCount - 1)
                 stopDrag(startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition())
                 if (startPosition != NO_POSITION && endPosition != NO_POSITION)
                     dragNDropListener?.onDrop(startPosition, endPosition)
@@ -90,7 +90,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             else -> {
                 dragMode = false
                 val endPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
-                        ?: childCount - 1
+                    ?: (childCount - 1)
                 stopDrag(startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition())
                 if (startPosition != NO_POSITION && endPosition != NO_POSITION)
                     dragNDropListener?.onDrop(startPosition, endPosition)

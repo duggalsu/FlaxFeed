@@ -13,11 +13,11 @@ androidExtensions {
  **/
 
 android {
-    compileSdk 30
+    compileSdk 33
     defaultConfig {
         applicationId "net.frju.flym"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 21 // TODO: custom builds separate apps sdk 26
+        targetSdkVersion 33
         versionCode 40
         versionName "2.5.6"
         javaCompileOptions {

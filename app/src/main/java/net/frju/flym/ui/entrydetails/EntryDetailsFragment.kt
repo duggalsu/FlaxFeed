@@ -323,7 +323,7 @@ class EntryDetailsFragment : Fragment() {
             if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
                 if (entryWithFeed.entry.mobilizedContent == null) {
                     this@EntryDetailsFragment.context?.let { c ->
-                        if (c.isOnline()) {
+                        if (c.isOnline(c)) {
                             CoroutineScope(Dispatchers.IO).async {
                                 FetcherService.addEntriesToMobilize(listOf(entryWithFeed.entry.id))
                                 c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
