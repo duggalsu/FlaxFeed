@@ -19,9 +19,11 @@ package net.frju.flym.utils
 
 import android.content.Intent
 import android.text.TextUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.frju.flym.App
 import net.frju.flym.service.FetcherService
-import org.jetbrains.anko.doAsync
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import java.io.File
@@ -120,7 +122,7 @@ object HtmlUtils {
 
             // Download the images if needed
             if (!imagesToDl.isEmpty()) {
-                doAsync {
+                CoroutineScope(Dispatchers.IO).async {
                     FetcherService.addImagesToDownload(mapOf(itemId to imagesToDl))
                     App.context.startService(Intent(App.context, FetcherService::class.java).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES))
                 }

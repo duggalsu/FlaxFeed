@@ -24,10 +24,12 @@ import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
 import android.os.Build
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.getPrefString
-import org.jetbrains.anko.doAsync
 import kotlin.math.max
 
 class AutoRefreshJobService : JobService() {
@@ -66,7 +68,7 @@ class AutoRefreshJobService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
         if (!ignoreNextJob && !getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
-            doAsync {
+            CoroutineScope(Dispatchers.IO).async {
                 FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
                 jobFinished(params, false)
             }

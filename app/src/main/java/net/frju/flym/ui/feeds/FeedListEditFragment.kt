@@ -29,11 +29,13 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
-import org.jetbrains.anko.doAsync
 
 
 class FeedListEditFragment : Fragment() {
@@ -138,7 +140,7 @@ class FeedListEditFragment : Fragment() {
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             val groupName = input.text.toString()
                             if (groupName.isNotBlank()) {
-                                doAsync {
+                                CoroutineScope(Dispatchers.IO).async {
                                     val newGroup = Feed().apply {
                                         title = groupName
                                         isGroup = true
@@ -159,7 +161,7 @@ class FeedListEditFragment : Fragment() {
     private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
         fromFeed.displayPriority = newDisplayPriority
 
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             App.db.feedDao().update(fromFeed)
         }
     }

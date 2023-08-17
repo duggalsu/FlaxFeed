@@ -16,6 +16,9 @@ import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.GlideApp
@@ -23,7 +26,6 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntryAdapter
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.uiThread
 import org.json.JSONException
@@ -103,7 +105,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
     }
 
     private fun searchForFeed(term: String) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             val array = ArrayList<SearchFeedResult>()
             try {
                 FetcherService.createCall(getFeedlySearchUrl(term)).execute().use {

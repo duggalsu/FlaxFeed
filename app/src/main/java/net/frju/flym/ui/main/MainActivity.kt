@@ -38,6 +38,9 @@ import com.rometools.opml.feed.opml.Outline
 import com.rometools.opml.io.impl.OPML20Generator
 import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -165,7 +168,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     PopupMenu(this, view).apply {
                         setOnMenuItemClickListener { item ->
                             when (item.itemId) {
-                                R.id.mark_all_as_read -> doAsync {
+                                R.id.mark_all_as_read -> CoroutineScope(Dispatchers.IO).async {
                                     when {
                                         feedWithCount.feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
                                         feedWithCount.feed.isGroup -> App.db.entryDao().markGroupAsRead(feedWithCount.feed.id)
@@ -190,7 +193,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                                 val newName = input.feed_name.text.toString()
                                                 val newLink = input.feed_link.text.toString()
                                                 if (newName.isNotBlank() && (newLink.isNotBlank() || feedWithCount.feed.isGroup)) {
-                                                    doAsync {
+                                                    CoroutineScope(Dispatchers.IO).async {
                                                         // Need to do a copy to not directly modify the memory and being able to detect changes
                                                         val newFeed = feedWithCount.feed.copy().apply {
                                                             title = newName
@@ -211,12 +214,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                             .setTitle(feedWithCount.feed.title)
                                             .setMessage(if (feedWithCount.feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
                                             .setPositiveButton(android.R.string.ok) { _, _ ->
-                                                doAsync { App.db.feedDao().delete(feedWithCount.feed) }
+                                                CoroutineScope(Dispatchers.IO).async { App.db.feedDao().delete(feedWithCount.feed) }
                                             }.setNegativeButton(android.R.string.cancel, null)
                                             .show()
                                 }
-                                R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feedWithCount.feed.id) }
-                                R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feedWithCount.feed.id) }
+                                R.id.enable_full_text_retrieval -> CoroutineScope(Dispatchers.IO).async { App.db.feedDao().enableFullTextRetrieval(feedWithCount.feed.id) }
+                                R.id.disable_full_text_retrieval -> CoroutineScope(Dispatchers.IO).async { App.db.feedDao().disableFullTextRetrieval(feedWithCount.feed.id) }
                             }
                             true
                         }
@@ -457,7 +460,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun openInBrowser(entryId: String) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             App.db.entryDao().findByIdWithFeed(entryId)?.entry?.link?.let { url ->
                 App.db.entryDao().markAsRead(listOf(entryId))
                 browse(url)
@@ -519,7 +522,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun importOpml(uri: Uri) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             try {
                 InputStreamReader(contentResolver.openInputStream(uri)!!).use { reader -> parseOpml(reader) }
             } catch (e: Exception) {
@@ -536,7 +539,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun exportOpml(uri: Uri) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             try {
                 OutputStreamWriter(contentResolver.openOutputStream(uri)!!, Charsets.UTF_8).use { writer -> exportOpml(writer) }
                 contentResolver.query(uri, null, null, null, null)?.use { cursor ->

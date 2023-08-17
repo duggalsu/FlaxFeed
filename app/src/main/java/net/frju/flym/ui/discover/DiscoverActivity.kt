@@ -9,13 +9,15 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.utils.setupTheme
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onEditorAction
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
@@ -134,7 +136,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
     }
 
     override fun addFeed(view: View, title: String, link: String) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             val feedToAdd = Feed(link = link, title = title)
             App.db.feedDao().insert(feedToAdd)
             uiThread {
@@ -144,7 +146,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
     }
 
     override fun deleteFeed(view: View, feed: SearchFeedResult) {
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             App.db.feedDao().deleteByLink(feed.link)
         }
     }

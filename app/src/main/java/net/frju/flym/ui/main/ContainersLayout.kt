@@ -55,6 +55,7 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 MainNavigator.State.SINGLE_COLUMN_DETAILS -> singleColumnDetails()
                 MainNavigator.State.TWO_COLUMNS_EMPTY -> twoColumnsEmpty()
                 MainNavigator.State.TWO_COLUMNS_WITH_DETAILS -> twoColumnsWithDetails()
+                else -> {}
             }
         }
 

@@ -18,9 +18,11 @@
 package net.frju.flym.utils
 
 import android.app.Activity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefConstants
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.inputMethodManager
 
 fun Activity.closeKeyboard() {
@@ -30,7 +32,7 @@ fun Activity.closeKeyboard() {
 }
 
 fun Activity.setupTheme() {
-    doAsync {
+    CoroutineScope(Dispatchers.IO).async {
         setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
             "LIGHT" -> R.style.AppThemeLight
             "BLACK" -> R.style.AppThemeBlack
@@ -40,7 +42,7 @@ fun Activity.setupTheme() {
 }
 
 fun Activity.setupNoActionBarTheme() {
-    doAsync {
+    CoroutineScope(Dispatchers.IO).async {
         setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
             "LIGHT" -> R.style.AppThemeLight_NoActionBar
             "BLACK" -> R.style.AppThemeBlack_NoActionBar

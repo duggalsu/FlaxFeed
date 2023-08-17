@@ -24,6 +24,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import net.frju.flym.data.converters.Converters
 import net.frju.flym.data.dao.EntryDao
 import net.frju.flym.data.dao.FeedDao
@@ -78,7 +81,8 @@ abstract class AppDatabase : RoomDatabase() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
 
-                            doAsync {
+                            // TODO: confirm this async works
+                            CoroutineScope(Dispatchers.IO).async {
                                 // insert => add max priority for the group
                                 db.execSQL("""
                                     CREATE TRIGGER feed_insert_priority

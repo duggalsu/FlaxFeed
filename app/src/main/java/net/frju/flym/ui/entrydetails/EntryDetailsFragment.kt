@@ -33,6 +33,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
@@ -48,7 +51,6 @@ import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.isGestureNavigationEnabled
 import net.frju.flym.utils.isOnline
 import org.jetbrains.anko.attr
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -216,7 +218,7 @@ class EntryDetailsFragment : Fragment() {
                 }
             } else {
                 if (isMobilizing) {
-                    doAsync {
+                    CoroutineScope(Dispatchers.IO).async {
                         App.db.entryDao().findByIdWithFeed(entryId)?.let { newEntry ->
                             uiThread {
                                 entryWithFeed = newEntry
@@ -274,7 +276,7 @@ class EntryDetailsFragment : Fragment() {
                                 item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_star_border_white_24dp)
                             }
 
-                            doAsync {
+                            CoroutineScope(Dispatchers.IO).async {
                                 App.db.entryDao().update(entryWithFeed.entry)
                             }
                         }
@@ -293,7 +295,7 @@ class EntryDetailsFragment : Fragment() {
                             switchFullTextMode()
                         }
                         R.id.menu_entry_details__mark_as_unread -> {
-                            doAsync {
+                            CoroutineScope(Dispatchers.IO).async {
                                 App.db.entryDao().markAsUnread(listOf(entryId))
                             }
                             if (activity?.containers_layout?.hasTwoColumns() != true) {
@@ -310,7 +312,7 @@ class EntryDetailsFragment : Fragment() {
 
     private fun switchFullTextMode() {
         // Enable this to test new manual mobilization
-//		doAsync {
+//		CoroutineScope(Dispatchers.IO).async {
 //			entryWithFeed?.entry?.let {
 //				it.mobilizedContent = null
 //				App.db.entryDao().insert(it)
@@ -322,7 +324,7 @@ class EntryDetailsFragment : Fragment() {
                 if (entryWithFeed.entry.mobilizedContent == null) {
                     this@EntryDetailsFragment.context?.let { c ->
                         if (c.isOnline()) {
-                            doAsync {
+                            CoroutineScope(Dispatchers.IO).async {
                                 FetcherService.addEntriesToMobilize(listOf(entryWithFeed.entry.id))
                                 c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
                             }
@@ -354,7 +356,7 @@ class EntryDetailsFragment : Fragment() {
         arguments?.putString(ARG_ENTRY_ID, entryId)
         arguments?.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
 
-        doAsync {
+        CoroutineScope(Dispatchers.IO).async {
             App.db.entryDao().findByIdWithFeed(entryId)?.let { entry ->
                 val feed = App.db.feedDao().findById(entry.entry.feedId)
                 entryWithFeed = entry
