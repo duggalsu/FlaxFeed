@@ -26,10 +26,6 @@ android {
         }
     }
 
-    lintOptions {
-        // if true, stop the gradle build if errors are found
-        abortOnError true
-    }
 
     File localProps = project.rootProject.file('local.properties')
     Properties properties = new Properties()
@@ -69,6 +65,10 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+    }
+    namespace 'net.fred.feedex'
+    lint {
+        abortOnError true
     }
 }
 
