@@ -40,6 +40,10 @@ import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
 import net.fred.feedex.R
 import net.fred.feedex.databinding.ActivityMainBinding
+import net.fred.feedex.databinding.DialogEditFeedBinding
+import net.fred.feedex.databinding.FragmentEntriesBinding
+import net.fred.feedex.databinding.FragmentEntryDetailsBinding
+import net.fred.feedex.databinding.FragmentEntryDetailsNoswipeBinding
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
@@ -88,7 +92,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
-    public lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
+    private lateinit var binding_dialog_edit_feed: DialogEditFeedBinding
+    private lateinit var binding_fragment_entries: FragmentEntriesBinding
+    private var _binding_fragment_entry_details: FragmentEntryDetailsBinding? = null
+    private var _binding_fragment_entry_details_noswipe: FragmentEntryDetailsNoswipeBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
@@ -98,6 +106,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val layoutView = binding.root
         setContentView(layoutView)
+
+        binding_fragment_entries = FragmentEntriesBinding.inflate(layoutInflater)
+        _binding_fragment_entry_details = FragmentEntryDetailsBinding.inflate(layoutInflater)
+        _binding_fragment_entry_details_noswipe = FragmentEntryDetailsNoswipeBinding.inflate(layoutInflater)
 
         binding.drawerHeader.more.onClick {
             it?.let { view ->
@@ -149,11 +161,19 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     if (hasFetchingError()) {
                         binding.drawerHeader.drawerHint.textColor = Color.RED
                         binding.drawerHeader.drawerHint.textResource = R.string.drawer_fetch_error_explanation
-                        toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
+                        if (defaultSharedPreferences.getBoolean(PrefConstants.ENABLE_SWIPE_ENTRY, true)) {
+                            _binding_fragment_entry_details!!.toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
+                        } else {
+                            _binding_fragment_entry_details_noswipe!!.toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
+                        }
                     } else {
                         binding.drawerHeader.drawerHint.textColor = Color.WHITE
                         binding.drawerHeader.drawerHint.textResource = R.string.drawer_explanation
-                        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+                        if (defaultSharedPreferences.getBoolean(PrefConstants.ENABLE_SWIPE_ENTRY, true)) {
+                            _binding_fragment_entry_details!!.toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+                        } else {
+                            _binding_fragment_entry_details!!.toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+                        }
                     }
                 }
 
@@ -174,22 +194,21 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                     }
                                 }
                                 R.id.edit_feed -> {
-                                    @SuppressLint("InflateParams")
-                                    val input = layoutInflater.inflate(R.layout.dialog_edit_feed, null, false).apply {
-                                        feed_name.setText(feedWithCount.feed.title)
+                                    binding_dialog_edit_feed = DialogEditFeedBinding.inflate(layoutInflater).apply {
+                                        binding_dialog_edit_feed.feedName.setText(feedWithCount.feed.title)
                                         if (feedWithCount.feed.isGroup) {
-                                            feed_link.isGone = true
+                                            binding_dialog_edit_feed.feedLink.isGone = true
                                         } else {
-                                            feed_link.setText(feedWithCount.feed.link)
+                                            binding_dialog_edit_feed.feedLink.setText(feedWithCount.feed.link)
                                         }
                                     }
 
                                     AlertDialog.Builder(this@MainActivity)
                                             .setTitle(R.string.menu_edit_feed)
-                                            .setView(input)
+                                            .setView(binding_dialog_edit_feed.root)
                                             .setPositiveButton(android.R.string.ok) { _, _ ->
-                                                val newName = input.feed_name.text.toString()
-                                                val newLink = input.feed_link.text.toString()
+                                                val newName = binding_dialog_edit_feed.feedName.text.toString()
+                                                val newLink = binding_dialog_edit_feed.feedLink.text.toString()
                                                 if (newName.isNotBlank() && (newLink.isNotBlank() || feedWithCount.feed.isGroup)) {
                                                     doAsync {
                                                         // Need to do a copy to not directly modify the memory and being able to detect changes
@@ -337,28 +356,28 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         if (intent?.getBooleanExtra(EXTRA_FROM_NOTIF, false) == true && feedGroups.isNotEmpty()) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
             goToEntriesList(feedGroups[0].feedWithCount.feed)
-            bottom_navigation.selectedItemId = R.id.unreads
+            binding_fragment_entries.bottomNavigation.selectedItemId = R.id.unreads
         }
     }
 
     private fun handleResumeOnlyIntents(intent: Intent?) {
 
         // If it comes from the All feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_ALL) && bottom_navigation.selectedItemId != R.id.all) {
+        if (intent?.action.equals(INTENT_ALL) && binding_fragment_entries.bottomNavigation.selectedItemId != R.id.all) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
-            bottom_navigation.selectedItemId = R.id.all
+            binding_fragment_entries.bottomNavigation.selectedItemId = R.id.all
         }
 
         // If it comes from the Favorites feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_FAVORITES) && bottom_navigation.selectedItemId != R.id.favorites) {
+        if (intent?.action.equals(INTENT_FAVORITES) && binding_fragment_entries.bottomNavigation.selectedItemId != R.id.favorites) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
-            bottom_navigation.selectedItemId = R.id.favorites
+            binding_fragment_entries.bottomNavigation.selectedItemId = R.id.favorites
         }
 
         // If it comes from the Unreads feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_UNREADS) && bottom_navigation.selectedItemId != R.id.unreads) {
+        if (intent?.action.equals(INTENT_UNREADS) && binding_fragment_entries.bottomNavigation.selectedItemId != R.id.unreads) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
-            bottom_navigation.selectedItemId = R.id.unreads
+            binding_fragment_entries.bottomNavigation.selectedItemId = R.id.unreads
         }
     }
 
@@ -644,9 +663,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun goBack(): Boolean {
-        if (binding.containers_layout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || binding.containers_layout.hasTwoColumns()) return false
+        if (binding.containersLayout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || binding.containersLayout.hasTwoColumns()) return false
         if (clearDetails()) {
-            binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+            binding.containersLayout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
             return true
         }
         return false
