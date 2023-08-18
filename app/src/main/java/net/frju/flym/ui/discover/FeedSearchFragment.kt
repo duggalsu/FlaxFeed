@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import net.fred.feedex.R
 import net.frju.flym.App
-import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
@@ -204,7 +203,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             val letterDrawable = Feed.getLetterDrawable(item.link.hashCode().toLong(), item.name)
             viewHolder.icon?.let { iv ->
                 if (!item.iconUrl.isNullOrEmpty()) {
-                    GlideApp.with(context)
+                    com.bumptech.glide.Glide.with(context)
                             .load(item.iconUrl)
                             .centerCrop()
                             .transition(DrawableTransitionOptions.withCrossFade(EntryAdapter.CROSS_FADE_FACTORY))
@@ -212,7 +211,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                             .error(letterDrawable)
                             .into(iv)
                 } else {
-                    GlideApp.with(context).clear(iv)
+                    com.bumptech.glide.Glide.with(context).clear(iv)
                     iv.setImageDrawable(letterDrawable)
                 }
             }

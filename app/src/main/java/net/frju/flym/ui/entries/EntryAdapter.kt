@@ -30,7 +30,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
-import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
@@ -67,9 +66,9 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
                 uiThread {
                     val letterDrawable = Feed.getLetterDrawable(entryWithFeed.entry.feedId, entryWithFeed.feedTitle)
                     if (mainImgUrl != null) {
-                        GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
+                        com.bumptech.glide.Glide.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
                     } else {
-                        GlideApp.with(context).clear(main_icon)
+                        com.bumptech.glide.Glide.with(context).clear(main_icon)
                         main_icon.setImageDrawable(letterDrawable)
                     }
 
@@ -103,7 +102,7 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
         }
 
         fun clear() = with(itemView) {
-            GlideApp.with(context).clear(main_icon)
+            com.bumptech.glide.Glide.with(context).clear(main_icon)
         }
     }
 

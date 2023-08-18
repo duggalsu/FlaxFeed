@@ -562,6 +562,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
     private val handler = Handler()
 
+    @Deprecated("Deprecated in Java")
     public override fun onHandleIntent(intent: Intent?) {
         if (intent == null) { // No intent, we quit
             return

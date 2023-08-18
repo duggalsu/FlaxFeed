@@ -102,6 +102,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         webViewClient = object : WebViewClient() {
 
+            @Deprecated("Deprecated in Java")
             @Suppress("OverridingDeprecatedMember")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 try {

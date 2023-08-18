@@ -27,7 +27,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
 import java.util.*
