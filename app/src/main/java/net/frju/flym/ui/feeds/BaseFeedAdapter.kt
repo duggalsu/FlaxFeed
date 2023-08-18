@@ -83,13 +83,13 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
     private lateinit var binding: ViewFeedBinding
     override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {
-        val view = ViewFeedBinding.inflate(LayoutInflater.from(parentViewGroup.context), parentViewGroup, false)
-        return FeedGroupViewHolder(view.root)
+        binding = ViewFeedBinding.inflate(LayoutInflater.from(parentViewGroup.context), parentViewGroup, false)
+        return FeedGroupViewHolder(binding.root)
     }
 
     override fun onCreateChildViewHolder(childViewGroup: ViewGroup, viewType: Int): FeedViewHolder {
-        val view = ViewFeedBinding.inflate(LayoutInflater.from(childViewGroup.context), childViewGroup, false)
-        return FeedViewHolder(view.root)
+        binding = ViewFeedBinding.inflate(LayoutInflater.from(childViewGroup.context), childViewGroup, false)
+        return FeedViewHolder(binding.root)
     }
 
     override fun onBindParentViewHolder(groupViewHolder: FeedGroupViewHolder, parentPosition: Int, group: FeedGroup) {
