@@ -115,6 +115,7 @@ class EntryDetailsFragment : Fragment() {
         entry_view.destroy()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 

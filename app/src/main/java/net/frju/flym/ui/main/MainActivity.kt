@@ -38,11 +38,8 @@ import com.rometools.opml.feed.opml.Outline
 import com.rometools.opml.io.impl.OPML20Generator
 import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
-import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.view_main_drawer_header.*
 import net.fred.feedex.R
+import net.fred.feedex.databinding.ActivityMainBinding
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
@@ -91,12 +88,16 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
 
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val layout_view = binding.root
+        setContentView(layout_view)
 
         more.onClick {
             it?.let { view ->
@@ -116,10 +117,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 }
             }
         }
-        nav.layoutManager = LinearLayoutManager(this)
-        nav.adapter = feedAdapter
+        binding.nav.layoutManager = LinearLayoutManager(this)
+        binding.nav.adapter = feedAdapter
 
-        add_feed_fab.onClick {
+        binding.add_feed_fab.onClick {
             goToFeedSearch()
         }
 
@@ -277,28 +278,28 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         super.onStart()
 
         if (getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false)) {
-            ViewCompat.setOnApplyWindowInsetsListener(nav) { _, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(binding.nav) { _, insets ->
                 val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                nav.updatePadding(bottom = systemInsets.bottom)
-                drawer.updatePadding(left = systemInsets.left, right = systemInsets.right)
-                guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                binding.nav.updatePadding(bottom = systemInsets.bottom)
+                binding.drawer.updatePadding(left = systemInsets.left, right = systemInsets.right)
+                binding.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     guideBegin = systemInsets.top
                 }
-                drawer_content.updatePadding(left = systemInsets.left)
-                drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
+                binding.drawer_content.updatePadding(left = systemInsets.left)
+                binding.drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
                     width = resources.getDimensionPixelSize(R.dimen.nav_drawer_width) + systemInsets.left
                 }
                 insets
             }
         } else {
-            ViewCompat.setOnApplyWindowInsetsListener(nav, null)
-            nav.updatePadding(bottom = 0)
-            drawer.updatePadding(left = 0, right = 0)
-            guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.nav, null)
+            binding.nav.updatePadding(bottom = 0)
+            binding.drawer.updatePadding(left = 0, right = 0)
+            binding.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 guideBegin = 0
             }
-            drawer_content.updatePadding(left = 0)
-            drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
+            binding.drawer_content.updatePadding(left = 0)
+            binding.drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
                 width = resources.getDimensionPixelSize(R.dimen.nav_drawer_width)
             }
         }
@@ -386,15 +387,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.closeDrawer(GravityCompat.START)
-        } else if (toolbar.hasExpandedActionView()) {
-            toolbar.collapseActionView()
+        if (binding.drawer?.isDrawerOpen(GravityCompat.START) == true) {
+            binding.drawer?.closeDrawer(GravityCompat.START)
+        } else if (toolbar().hasExpandedActionView()) {
+            toolbar().collapseActionView()
         } else if (!goBack()) {
             super.onBackPressed()
         }
@@ -402,7 +405,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
-        containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+        binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
 
         // We try to reuse the fragment to avoid loosing the bottom tab position
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
@@ -423,8 +426,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
         closeKeyboard()
 
-        if (containers_layout.hasTwoColumns()) {
-            containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
+        if (binding.containers_layout.hasTwoColumns()) {
+            binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
             val fragment = EntryDetailsFragment.newInstance(entryId, allEntryIds)
             supportFragmentManager
                     .beginTransaction()
@@ -508,6 +511,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
 
@@ -535,6 +539,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @SuppressLint("Range")
     private fun exportOpml(uri: Uri) {
         doAsync {
             try {
@@ -619,29 +624,29 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun closeDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.postDelayed({ drawer.closeDrawer(GravityCompat.START) }, 100)
+        if (binding.drawer?.isDrawerOpen(GravityCompat.START) == true) {
+            binding.drawer?.postDelayed({ binding.drawer.closeDrawer(GravityCompat.START) }, 100)
         }
     }
 
     private fun openDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == false) {
-            drawer?.openDrawer(GravityCompat.START)
+        if (binding.drawer?.isDrawerOpen(GravityCompat.START) == false) {
+            binding.drawer?.openDrawer(GravityCompat.START)
         }
     }
 
     fun toggleDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.closeDrawer(GravityCompat.START)
+        if (binding.drawer?.isDrawerOpen(GravityCompat.START) == true) {
+            binding.drawer?.closeDrawer(GravityCompat.START)
         } else {
-            drawer?.openDrawer(GravityCompat.START)
+            binding.drawer?.openDrawer(GravityCompat.START)
         }
     }
 
     private fun goBack(): Boolean {
-        if (containers_layout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || containers_layout.hasTwoColumns()) return false
+        if (binding.containers_layout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || binding.containers_layout.hasTwoColumns()) return false
         if (clearDetails()) {
-            containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+            binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
             return true
         }
         return false

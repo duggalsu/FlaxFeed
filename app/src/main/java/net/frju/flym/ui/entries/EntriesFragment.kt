@@ -144,6 +144,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         setHasOptionsMenu(true)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -585,14 +586,14 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             }
         })
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 searchText = ""
                 initDataObservers()
                 bottom_navigation.isGone = true
                 return true
             }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 searchText = null
                 initDataObservers()
                 bottom_navigation.isVisible = true

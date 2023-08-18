@@ -30,13 +30,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_search_white_24dp"
-        android:tint="?attr/colorAccent"
         app:layout_constraintBottom_toTopOf="@id/fcv_discover_fragments"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toLeftOf="@id/et_search_input"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        app:tint="?attr/colorAccent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_discover_fragments"
