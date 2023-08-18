@@ -1,14 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'kotlin-parcelize'
-
-/**
-androidExtensions {
-    experimental = true
-}
- **/
 
 android {
     compileSdk 34
