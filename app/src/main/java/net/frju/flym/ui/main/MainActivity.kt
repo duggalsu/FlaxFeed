@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
-    private lateinit var binding: ActivityMainBinding
+    public lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
@@ -96,10 +96,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val layout_view = binding.root
-        setContentView(layout_view)
+        val layoutView = binding.root
+        setContentView(layoutView)
 
-        more.onClick {
+        binding.drawerHeader.more.onClick {
             it?.let { view ->
                 PopupMenu(this@MainActivity, view).apply {
                     menuInflater.inflate(R.menu.menu_drawer_header, menu)
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         binding.nav.layoutManager = LinearLayoutManager(this)
         binding.nav.adapter = feedAdapter
 
-        binding.add_feed_fab.onClick {
+        binding.addFeedFab.onClick {
             goToFeedSearch()
         }
 
@@ -147,12 +147,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     feedAdapter.notifyParentDataSetChanged(true)
 
                     if (hasFetchingError()) {
-                        drawer_hint.textColor = Color.RED
-                        drawer_hint.textResource = R.string.drawer_fetch_error_explanation
+                        binding.drawerHeader.drawerHint.textColor = Color.RED
+                        binding.drawerHeader.drawerHint.textResource = R.string.drawer_fetch_error_explanation
                         toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
                     } else {
-                        drawer_hint.textColor = Color.WHITE
-                        drawer_hint.textResource = R.string.drawer_explanation
+                        binding.drawerHeader.drawerHint.textColor = Color.WHITE
+                        binding.drawerHeader.drawerHint.textResource = R.string.drawer_explanation
                         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
                     }
                 }
@@ -282,11 +282,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 binding.nav.updatePadding(bottom = systemInsets.bottom)
                 binding.drawer.updatePadding(left = systemInsets.left, right = systemInsets.right)
-                binding.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                binding.drawerHeader.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     guideBegin = systemInsets.top
                 }
-                binding.drawer_content.updatePadding(left = systemInsets.left)
-                binding.drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
+                binding.drawerContent.updatePadding(left = systemInsets.left)
+                binding.drawerContent.updateLayoutParams<DrawerLayout.LayoutParams> {
                     width = resources.getDimensionPixelSize(R.dimen.nav_drawer_width) + systemInsets.left
                 }
                 insets
@@ -295,11 +295,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             ViewCompat.setOnApplyWindowInsetsListener(binding.nav, null)
             binding.nav.updatePadding(bottom = 0)
             binding.drawer.updatePadding(left = 0, right = 0)
-            binding.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            binding.drawerHeader.guideline.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 guideBegin = 0
             }
-            binding.drawer_content.updatePadding(left = 0)
-            binding.drawer_content.updateLayoutParams<DrawerLayout.LayoutParams> {
+            binding.drawerContent.updatePadding(left = 0)
+            binding.drawerContent.updateLayoutParams<DrawerLayout.LayoutParams> {
                 width = resources.getDimensionPixelSize(R.dimen.nav_drawer_width)
             }
         }
@@ -405,7 +405,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
-        binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+        binding.containersLayout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
 
         // We try to reuse the fragment to avoid loosing the bottom tab position
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
@@ -426,8 +426,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
         closeKeyboard()
 
-        if (binding.containers_layout.hasTwoColumns()) {
-            binding.containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
+        if (binding.containersLayout.hasTwoColumns()) {
+            binding.containersLayout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
             val fragment = EntryDetailsFragment.newInstance(entryId, allEntryIds)
             supportFragmentManager
                     .beginTransaction()
