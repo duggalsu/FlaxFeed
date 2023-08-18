@@ -29,8 +29,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
+import net.fred.feedex.databinding.FragmentFeedListEditBinding
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
@@ -42,10 +42,16 @@ class FeedListEditFragment : Fragment() {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = EditFeedAdapter(feedGroups)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
+    private var _binding: FragmentFeedListEditBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
-        view.feedsList.apply {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentFeedListEditBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        _binding?.feedsList?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = feedAdapter
 
@@ -73,15 +79,15 @@ class FeedListEditFragment : Fragment() {
 
                     if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
                         AlertDialog.Builder(activity)
-                                .setTitle(R.string.to_group_title)
-                                .setMessage(R.string.to_group_message)
-                                .setPositiveButton(R.string.to_group_into) { dialog, which ->
-                                    fromFeed.feed.groupId = toFeed.feed.id
-                                    changeItemPriority(fromFeed.feed, 1) // TODO would be better at the end instead of beginning
-                                }.setNegativeButton(R.string.to_group_above) { dialog, which ->
-                                    fromFeed.feed.groupId = toFeed.feed.groupId
-                                    changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
-                                }.show()
+                            .setTitle(R.string.to_group_title)
+                            .setMessage(R.string.to_group_message)
+                            .setPositiveButton(R.string.to_group_into) { dialog, which ->
+                                fromFeed.feed.groupId = toFeed.feed.id
+                                changeItemPriority(fromFeed.feed, 1) // TODO would be better at the end instead of beginning
+                            }.setNegativeButton(R.string.to_group_above) { dialog, which ->
+                                fromFeed.feed.groupId = toFeed.feed.groupId
+                                changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
+                            }.show()
                     } else if (!fromFeed.feed.isGroup || toFeed.feed.groupId == null) { // can't move group inside another one
                         fromFeed.feed.groupId = toFeed.feed.groupId
                         changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
@@ -90,7 +96,7 @@ class FeedListEditFragment : Fragment() {
             }
         }
 
-        App.db.feedDao().observeAllWithCount.observe(this, Observer { nullableFeeds ->
+        App.db.feedDao().observeAllWithCount.observe(viewLifecycleOwner, Observer { nullableFeeds ->
             nullableFeeds?.let { feeds ->
                 feedGroups.clear()
 
@@ -107,6 +113,11 @@ class FeedListEditFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

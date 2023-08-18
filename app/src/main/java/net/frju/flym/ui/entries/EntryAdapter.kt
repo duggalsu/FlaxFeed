@@ -28,8 +28,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
-import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
+import net.fred.feedex.databinding.ViewEntryBinding
+import net.fred.feedex.databinding.ViewMainContainersBinding
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
@@ -66,31 +67,31 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
                 uiThread {
                     val letterDrawable = Feed.getLetterDrawable(entryWithFeed.entry.feedId, entryWithFeed.feedTitle)
                     if (mainImgUrl != null) {
-                        com.bumptech.glide.Glide.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
+                        com.bumptech.glide.Glide.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(binding.mainIcon)
                     } else {
-                        com.bumptech.glide.Glide.with(context).clear(main_icon)
-                        main_icon.setImageDrawable(letterDrawable)
+                        com.bumptech.glide.Glide.with(context).clear(binding.mainIcon)
+                        binding.mainIcon.setImageDrawable(letterDrawable)
                     }
 
-                    main_icon.visibility = if (displayThumbnails) View.VISIBLE else View.GONE
+                    binding.mainIcon.visibility = if (displayThumbnails) View.VISIBLE else View.GONE
 
-                    title.isEnabled = !entryWithFeed.entry.read
-                    title.text = entryWithFeed.entry.title
+                    binding.title.isEnabled = !entryWithFeed.entry.read
+                    binding.title.text = entryWithFeed.entry.title
 
-                    feed_name_layout.isEnabled = !entryWithFeed.entry.read
-                    feed_name_layout.text = entryWithFeed.feedTitle.orEmpty()
+                    binding.feedNameLayout.isEnabled = !entryWithFeed.entry.read
+                    binding.feedNameLayout.text = entryWithFeed.feedTitle.orEmpty()
 
-                    date.isEnabled = !entryWithFeed.entry.read
-                    date.text = entryWithFeed.entry.getReadablePublicationDate(context)
+                    binding.date.isEnabled = !entryWithFeed.entry.read
+                    binding.date.text = entryWithFeed.entry.getReadablePublicationDate(context)
 
-                    favorite_icon.alpha = if (!entryWithFeed.entry.read) 1f else 0.5f
+                    binding.favoriteIcon.alpha = if (!entryWithFeed.entry.read) 1f else 0.5f
 
                     if (entryWithFeed.entry.favorite) {
-                        favorite_icon.setImageResource(R.drawable.ic_star_24dp)
+                        binding.favoriteIcon.setImageResource(R.drawable.ic_star_24dp)
                     } else {
-                        favorite_icon.setImageResource(R.drawable.ic_star_border_24dp)
+                        binding.favoriteIcon.setImageResource(R.drawable.ic_star_border_24dp)
                     }
-                    favorite_icon.onClick { favoriteClickListener(entryWithFeed, favorite_icon) }
+                    binding.favoriteIcon.onClick { favoriteClickListener(entryWithFeed, binding.favoriteIcon) }
 
                     onClick { globalClickListener(entryWithFeed) }
                     onLongClick {
@@ -102,12 +103,15 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
         }
 
         fun clear() = with(itemView) {
-            com.bumptech.glide.Glide.with(context).clear(main_icon)
+            com.bumptech.glide.Glide.with(context).clear(binding.mainIcon)
         }
     }
 
+    private lateinit var binding: ViewEntryBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_entry, parent, false)
+        binding = ViewEntryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = binding.root
         return ViewHolder(view)
     }
 

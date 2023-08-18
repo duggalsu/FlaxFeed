@@ -24,8 +24,8 @@ import android.view.ViewGroup
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder
-import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
+import net.fred.feedex.databinding.ViewFeedBinding
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
 import net.frju.flym.data.utils.PrefConstants
@@ -81,14 +81,15 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
         return TYPE_CHILD
     }
 
+    private lateinit var binding: ViewFeedBinding
     override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {
-        val view = LayoutInflater.from(parentViewGroup.context).inflate(layoutId, parentViewGroup, false)
-        return FeedGroupViewHolder(view)
+        val view = ViewFeedBinding.inflate(LayoutInflater.from(parentViewGroup.context), parentViewGroup, false)
+        return FeedGroupViewHolder(view.root)
     }
 
     override fun onCreateChildViewHolder(childViewGroup: ViewGroup, viewType: Int): FeedViewHolder {
-        val view = LayoutInflater.from(childViewGroup.context).inflate(layoutId, childViewGroup, false)
-        return FeedViewHolder(view)
+        val view = ViewFeedBinding.inflate(LayoutInflater.from(childViewGroup.context), childViewGroup, false)
+        return FeedViewHolder(view.root)
     }
 
     override fun onBindParentViewHolder(groupViewHolder: FeedGroupViewHolder, parentPosition: Int, group: FeedGroup) {
@@ -105,32 +106,32 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
         fun bindItem(group: FeedGroup) {
             if (group.feedWithCount.feed.isGroup) {
                 if (isExpanded) {
-                    itemView.icon.setImageResource(
+                    binding.icon.setImageResource(
                             when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                 "LIGHT" -> R.drawable.ic_keyboard_arrow_up_black_24dp
                                 else -> R.drawable.ic_keyboard_arrow_up_white_24dp
                             })
-                    itemView.icon.contentDescription = R.string.collapse_arrow_content_description.toString()
+                    binding.icon.contentDescription = R.string.collapse_arrow_content_description.toString()
                 } else {
-                    itemView.icon.setImageResource(
+                    binding.icon.setImageResource(
                             when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                 "LIGHT" -> R.drawable.ic_keyboard_arrow_down_black_24dp
                                 else -> R.drawable.ic_keyboard_arrow_down_white_24dp
                             })
-                    itemView.icon.contentDescription = R.string.expand_arrow_content_description.toString()
+                    binding.icon.contentDescription = R.string.expand_arrow_content_description.toString()
                 }
 
-                itemView.icon.isClickable = true
-                itemView.icon.onClick {
+                binding.icon.isClickable = true
+                binding.icon.onClick {
                     if (isExpanded) {
-                        itemView.icon.setImageResource(
+                        binding.icon.setImageResource(
                                 when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                     "LIGHT" -> R.drawable.ic_keyboard_arrow_down_black_24dp
                                     else -> R.drawable.ic_keyboard_arrow_down_white_24dp
                                 })
                         collapseView()
                     } else {
-                        itemView.icon.setImageResource(
+                        binding.icon.setImageResource(
                                 when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                     "LIGHT" -> R.drawable.ic_keyboard_arrow_up_black_24dp
                                     else -> R.drawable.ic_keyboard_arrow_up_white_24dp
@@ -139,23 +140,23 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
                     }
                 }
             } else {
-                itemView.icon.isClickable = false
+                binding.icon.isClickable = false
                 if (group.feedWithCount.feed.id == Feed.ALL_ENTRIES_ID) {
-                    itemView.icon.setImageResource(
+                    binding.icon.setImageResource(
                             when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                 "LIGHT" -> R.drawable.ic_list_black_24dp
                                 else -> R.drawable.ic_list_white_24dp
                             })
                 } else {
-                    itemView.icon.setImageDrawable(group.feedWithCount.feed.getLetterDrawable(true))
+                    binding.icon.setImageDrawable(group.feedWithCount.feed.getLetterDrawable(true))
                 }
             }
-            itemView.title.text = group.feedWithCount.feed.title
-            itemView.entry_count?.text = group.getEntryCountString()
+            binding.title.text = group.feedWithCount.feed.title
+            binding.entryCount?.text = group.getEntryCountString()
             if (group.feedWithCount.feed.fetchError || group.subFeeds.any { it.feed.fetchError }) {
-                itemView.title.setTextColor(Color.RED) //TODO better
+                binding.title.setTextColor(Color.RED) //TODO better
             } else {
-                itemView.title.setTextColor(
+                binding.title.setTextColor(
                         when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                             "LIGHT" -> Color.BLACK
                             else -> Color.WHITE
@@ -179,19 +180,19 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
     inner class FeedViewHolder(itemView: View) : ChildViewHolder<FeedWithCount>(itemView) {
 
         fun bindItem(feedWithCount: FeedWithCount) {
-            itemView.title.text = feedWithCount.feed.title
-            itemView.entry_count?.text = feedWithCount.getEntryCountString()
+            binding.title.text = feedWithCount.feed.title
+            binding.entryCount?.text = feedWithCount.getEntryCountString()
             if (feedWithCount.feed.fetchError) { //TODO better
-                itemView.title.setTextColor(Color.RED)
+                binding.title.setTextColor(Color.RED)
             } else {
-                itemView.title.setTextColor(
+                binding.title.setTextColor(
                         when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                             "LIGHT" -> Color.BLACK
                             else -> Color.WHITE
                         })
             }
-            itemView.icon.isClickable = false
-            itemView.icon.setImageDrawable(feedWithCount.feed.getLetterDrawable(true))
+            binding.icon.isClickable = false
+            binding.icon.setImageDrawable(feedWithCount.feed.getLetterDrawable(true))
             itemView.setPadding(itemView.dip(30), 0, 0, 0)
             itemView.onClick {
                 feedClickListener?.invoke(itemView, feedWithCount)

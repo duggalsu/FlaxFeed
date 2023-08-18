@@ -43,6 +43,8 @@ import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import net.fred.feedex.R
+import net.fred.feedex.databinding.FragmentEntriesBinding
+import net.fred.feedex.databinding.ViewEntryBinding
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
@@ -61,7 +63,33 @@ import q.rorbin.badgeview.QBadgeView
 import java.util.*
 
 
-class EntriesFragment : Fragment(R.layout.fragment_entries) {
+class EntriesFragment : Fragment() {
+
+    private var _binding: FragmentEntriesBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    private var _binding_view_entry: ViewEntryBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding_view_entry get() = _binding_view_entry!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentEntriesBinding.inflate(inflater, container, false)
+        _binding_view_entry = ViewEntryBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _binding_view_entry = null
+    }
 
     companion object {
 
@@ -85,7 +113,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             field = value
 
             setupTitle()
-            bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected tab position
+            binding.bottomNavigation.post { initDataObservers() } // Needed to retrieve the correct selected tab position
         }
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
@@ -101,7 +129,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             favoriteClickListener = { entryWithFeed, view ->
                 entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 
-                view.favorite_icon?.let {
+                _binding_view_entry?.favoriteIcon?.let {
                     if (entryWithFeed.entry.favorite) {
                         it.setImageResource(R.drawable.ic_star_24dp)
                     } else {
@@ -154,30 +182,30 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
         setupRecyclerView()
 
-        bottom_navigation.setOnNavigationItemSelectedListener {
-            recycler_view.post {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+            binding.recyclerView.post {
                 listDisplayDate = Date().time
                 initDataObservers()
-                recycler_view.scrollToPosition(0)
+                binding.recyclerView.scrollToPosition(0)
             }
 
-            toolbar.menu?.findItem(R.id.menu_entries__share)?.isVisible = it.itemId == R.id.favorites
+            binding.toolbar.menu?.findItem(R.id.menu_entries__share)?.isVisible = it.itemId == R.id.favorites
             true
         }
 
-        (activity as MainActivity).setSupportActionBar(toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-        toolbar.setNavigationContentDescription(R.string.navigation_button_content_description)
-        toolbar.setNavigationOnClickListener { (activity as MainActivity).toggleDrawer() }
+        (activity as MainActivity).setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+        binding.toolbar.setNavigationContentDescription(R.string.navigation_button_content_description)
+        binding.toolbar.setNavigationOnClickListener { (activity as MainActivity).toggleDrawer() }
 
-        unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
+        unreadBadge = QBadgeView(context).bindTarget((binding.bottomNavigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
             setGravityOffset(35F, 0F, true)
             isShowShadow = false
             badgeBackgroundColor = requireContext().colorAttr(R.attr.colorUnreadBadgeBackground)
             badgeTextColor = requireContext().colorAttr(R.attr.colorUnreadBadgeText)
         }
 
-        read_all_fab.onClick { _ ->
+        binding.readAllFab.onClick { _ ->
             entryIds?.let { entryIds ->
                 if (entryIds.isNotEmpty()) {
                     doAsync {
@@ -188,7 +216,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                     }
 
                     Snackbar
-                            .make(coordinator, R.string.marked_as_read, Snackbar.LENGTH_LONG)
+                            .make(binding.coordinator, R.string.marked_as_read, Snackbar.LENGTH_LONG)
                             .setAction(R.string.undo) { _ ->
                                 doAsync {
                                     // TODO check if limit still needed
@@ -226,16 +254,16 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         entryIdsLiveData?.removeObservers(viewLifecycleOwner)
         entryIdsLiveData = when {
             searchText != null -> App.db.entryDao().observeIdsBySearch(searchText!!, isDesc)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate, isDesc)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate, isDesc)
+            feed?.isGroup == true && binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate, isDesc)
+            feed?.isGroup == true && binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate, isDesc)
             feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate, isDesc)
 
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate, isDesc)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate, isDesc)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate, isDesc)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate, isDesc)
             feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate, isDesc)
 
-            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate, isDesc)
-            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate, isDesc)
+            binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate, isDesc)
+            binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate, isDesc)
             else -> App.db.entryDao().observeAllIds(listDisplayDate, isDesc)
         }
 
@@ -246,16 +274,16 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         entriesLiveData?.removeObservers(viewLifecycleOwner)
         entriesLiveData = LivePagedListBuilder(when {
             searchText != null -> App.db.entryDao().observeSearch(searchText!!, isDesc)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate, isDesc)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate, isDesc)
+            feed?.isGroup == true && binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate, isDesc)
+            feed?.isGroup == true && binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate, isDesc)
             feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate, isDesc)
 
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate, isDesc)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate, isDesc)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate, isDesc)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate, isDesc)
             feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate, isDesc)
 
-            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate, isDesc)
-            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate, isDesc)
+            binding.bottomNavigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate, isDesc)
+            binding.bottomNavigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate, isDesc)
             else -> App.db.entryDao().observeAll(listDisplayDate, isDesc)
         }, 30).build()
 
@@ -273,7 +301,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         newCountLiveData?.observe(viewLifecycleOwner, Observer { count ->
             if (count != null && count > 0L) {
                 // If we have an empty list, let's immediately display the new items
-                if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
+                if (entryIds?.isEmpty() == true && binding.bottomNavigation.selectedItemId != R.id.favorites) {
                     listDisplayDate = Date().time
                     initDataObservers()
                 } else {
@@ -299,52 +327,52 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
 
         if (context?.getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false) == true) {
-            bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            binding.bottomNavigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 if (behavior !is HideBottomViewOnScrollBehavior) {
                     behavior = HideBottomViewOnScrollBehavior<BottomNavigationView>()
                 }
             }
             showNavigationIfRecyclerViewCannotScroll()
             fabScrollListener?.let {
-                recycler_view.removeOnScrollListener(it)
+                binding.recyclerView.removeOnScrollListener(it)
                 fabScrollListener = null
             }
             if (hideFAB) {
-                read_all_fab.hide()
+                binding.readAllFab.hide()
             } else {
                 if (isBottomNavigationViewShown()) {
-                    read_all_fab.show()
+                    binding.readAllFab.show()
                 }
                 fabScrollListener = object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        if (dy > 0 && read_all_fab.isShown) {
-                            read_all_fab.hide()
-                        } else if (dy < 0 && !read_all_fab.isShown) {
-                            read_all_fab.show()
+                        if (dy > 0 && binding.readAllFab.isShown) {
+                            binding.readAllFab.hide()
+                        } else if (dy < 0 && !binding.readAllFab.isShown) {
+                            binding.readAllFab.show()
                         }
                     }
                 }
-                recycler_view.addOnScrollListener(fabScrollListener!!)
+                binding.recyclerView.addOnScrollListener(fabScrollListener!!)
             }
-            toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+            binding.toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                         AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
             activity?.window?.let {
                 WindowCompat.setDecorFitsSystemWindows(it, false)
             }
-            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar) { _, insets ->
                 val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding.coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
                     leftMargin = systemInsets.left
                     rightMargin = systemInsets.right
                 }
-                recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + systemInsets.bottom)
-                bottom_navigation.updatePadding(bottom = systemInsets.bottom)
-                bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                binding.recyclerView.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + systemInsets.bottom)
+                binding.bottomNavigation.updatePadding(bottom = systemInsets.bottom)
+                binding.bottomNavigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                     height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + systemInsets.bottom
                 }
-                toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                binding.toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                     topMargin = systemInsets.top
                 }
                 insets
@@ -353,37 +381,37 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             activity?.window?.statusBarColor = statusBarBackground
             activity?.window?.navigationBarColor = if (context?.isGestureNavigationEnabled() == true) Color.TRANSPARENT else statusBarBackground
         } else {
-            coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
+            binding.coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
                 leftMargin = 0
                 rightMargin = 0
             }
-            recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
-            bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            binding.recyclerView.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
+            binding.bottomNavigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 if (behavior is HideBottomViewOnScrollBehavior) {
-                    (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
+                    (behavior as HideBottomViewOnScrollBehavior).slideUp(binding.bottomNavigation)
                 }
                 behavior = null
                 height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
             }
-            bottom_navigation.updatePadding(bottom = 0)
+            binding.bottomNavigation.updatePadding(bottom = 0)
             fabScrollListener?.let {
-                recycler_view.removeOnScrollListener(it)
+                binding.recyclerView.removeOnScrollListener(it)
                 fabScrollListener = null
             }
             if (hideFAB) {
-                read_all_fab.hide()
+                binding.readAllFab.hide()
             } else {
-                read_all_fab.show()
+                binding.readAllFab.show()
             }
-            appbar.setExpanded(true, true)
-            toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+            binding.appbar.setExpanded(true, true)
+            binding.toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                 scrollFlags = 0
                 topMargin = 0
             }
             activity?.window?.let {
                 WindowCompat.setDecorFitsSystemWindows(it, true)
             }
-            ViewCompat.setOnApplyWindowInsetsListener(toolbar, null)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar, null)
             val tv = TypedValue()
             if (activity?.theme?.resolveAttribute(R.attr.colorPrimaryDark, tv, true) == true) {
                 activity?.window?.statusBarColor = tv.data
@@ -407,18 +435,18 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
     }
 
     private fun setupRecyclerView() {
-        recycler_view.setHasFixedSize(true)
+        binding.recyclerView.setHasFixedSize(true)
 
         val layoutManager = LinearLayoutManager(activity)
-        recycler_view.layoutManager = layoutManager
-        recycler_view.adapter = adapter
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
 
-        refresh_layout.setColorScheme(R.color.colorAccent,
+        binding.refreshLayout.setColorScheme(R.color.colorAccent,
                 requireContext().attr(R.attr.colorPrimaryDark).resourceId,
                 R.color.colorAccent,
                 requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
-        refresh_layout.setOnRefreshListener {
+        binding.refreshLayout.setOnRefreshListener {
             startRefresh()
         }
 
@@ -451,7 +479,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                         }
 
                         Snackbar
-                                .make(coordinator, snackbarMessage, Snackbar.LENGTH_LONG)
+                                .make(binding.coordinator, snackbarMessage, Snackbar.LENGTH_LONG)
                                 .setAction(R.string.undo) { _ ->
                                     doAsync {
                                         if (entryWithFeed.entry.read) {
@@ -475,7 +503,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                             showNavigationIfRecyclerViewCannotScroll()
                         }
 
-                        if (bottom_navigation.selectedItemId != R.id.unreads) {
+                        if (binding.bottomNavigation.selectedItemId != R.id.unreads) {
                             uiThread {
                                 adapter.notifyItemChanged(viewHolder.adapterPosition)
                             }
@@ -486,11 +514,11 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         }
 
         // attaching the touch helper to recycler view
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recycler_view)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.recyclerView)
 
-        recycler_view.emptyView = empty_view
+        binding.recyclerView.emptyView = binding.emptyView
 
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 activity?.closeKeyboard()
@@ -509,11 +537,11 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         }
 
         // In case there is no internet, the service won't even start, let's quickly stop the refresh animation
-        refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
+        binding.refreshLayout.postDelayed({ refreshSwipeProgress() }, 500)
     }
 
     private fun setupTitle() {
-        activity?.toolbar?.apply {
+        binding.toolbar.apply {
             if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
                 titleResource = R.string.all_entries
             } else {
@@ -524,24 +552,24 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
     private fun showNavigationIfRecyclerViewCannotScroll() {
         val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
-        val canScrollRecyclerView = recycler_view.canScrollVertically(1) ||
-                recycler_view.canScrollVertically(-1)
-        bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+        val canScrollRecyclerView = binding.recyclerView.canScrollVertically(1) ||
+                binding.recyclerView.canScrollVertically(-1)
+        binding.bottomNavigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
             if (!canScrollRecyclerView) {
-                (behavior as? HideBottomViewOnScrollBehavior)?.slideUp(bottom_navigation)
+                (behavior as? HideBottomViewOnScrollBehavior)?.slideUp(binding.bottomNavigation)
             }
         }
         if (!canScrollRecyclerView) {
-            appbar.setExpanded(true, true)
+            binding.appbar.setExpanded(true, true)
             if (!hideFAB) {
-                read_all_fab.show()
+                binding.readAllFab.show()
             }
         }
     }
 
     private fun isBottomNavigationViewShown(): Boolean {
         val location = IntArray(2)
-        bottom_navigation.getLocationOnScreen(location)
+        binding.bottomNavigation.getLocationOnScreen(location)
         return location[1] < resources.displayMetrics.heightPixels
     }
 
@@ -550,7 +578,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
         inflater.inflate(R.menu.menu_fragment_entries, menu)
 
-        menu.findItem(R.id.menu_entries__share).isVisible = bottom_navigation.selectedItemId == R.id.favorites
+        menu.findItem(R.id.menu_entries__share).isVisible = binding.bottomNavigation.selectedItemId == R.id.favorites
 
         val searchItem = menu.findItem(R.id.menu_entries__search)
         val searchView = searchItem.actionView as SearchView
@@ -584,14 +612,14 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 searchText = ""
                 initDataObservers()
-                bottom_navigation.isGone = true
+                binding.bottomNavigation.isGone = true
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 searchText = null
                 initDataObservers()
-                bottom_navigation.isVisible = true
+                binding.bottomNavigation.isVisible = true
                 return true
             }
         })
@@ -622,7 +650,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
     }
 
     private fun refreshSwipeProgress() {
-        refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false)
+        binding.refreshLayout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false)
                 ?: false
     }
 }
