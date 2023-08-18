@@ -34,8 +34,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
-import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
+import net.fred.feedex.databinding.ActivityMainBinding
+import net.fred.feedex.databinding.ViewMainContainersBinding
 import net.frju.flym.utils.onLaidOut
 
 class ContainersLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
@@ -56,31 +57,33 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 MainNavigator.State.SINGLE_COLUMN_DETAILS -> singleColumnDetails()
                 MainNavigator.State.TWO_COLUMNS_EMPTY -> twoColumnsEmpty()
                 MainNavigator.State.TWO_COLUMNS_WITH_DETAILS -> twoColumnsWithDetails()
+                else -> {}
             }
         }
 
+    private var binding: ViewMainContainersBinding
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_main_containers, this, true)
+        binding = ViewMainContainersBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
     fun hasTwoColumns(): Boolean {
-        return two_columns_container != null
+        return binding.twoColumnsContainer != null
     }
 
     private fun singleColumnMaster() {
         if (hasTwoColumns()) {
-            frame_details.visibility = View.GONE
-            frame_master.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            frame_master.layoutParams = frame_master.layoutParams
+            binding.frameDetails.visibility = View.GONE
+            binding.frameMaster.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+            binding.frameMaster.layoutParams = binding.frameMaster.layoutParams
         } else {
             animateOutFrameDetails()
         }
-        frame_master.visibility = View.VISIBLE
+        binding.frameMaster.visibility = View.VISIBLE
     }
 
     private fun singleColumnDetails() {
-        frame_master.visibility = View.GONE
-        frame_details.visibility = View.VISIBLE
+        binding.frameMaster.visibility = View.GONE
+        binding.frameDetails.visibility = View.VISIBLE
     }
 
     private fun twoColumnsEmpty() {
@@ -100,25 +103,25 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun setupSecondColumn() {
-        frame_master.run {
+        binding.frameMaster.run {
             isVisible = true
             layoutParams.width = context.resources.getDimensionPixelSize(R.dimen.container_max_width)
-            layoutParams = frame_master.layoutParams
+            layoutParams = binding.frameMaster.layoutParams
         }
-        frame_details.run {
+        binding.frameDetails.run {
             isVisible = true
             (layoutParams as LayoutParams).marginStart = context.resources.getDimensionPixelSize(R.dimen.container_max_width)
-            layoutParams = frame_details.layoutParams
+            layoutParams = binding.frameDetails.layoutParams
         }
     }
 
     private fun animateInFrameDetails() {
-        frame_master.isVisible = true
-        frame_details.isVisible = true
+        binding.frameMaster.isVisible = true
+        binding.frameDetails.isVisible = true
 
-        frame_details.onLaidOut {
-            val alpha = ObjectAnimator.ofFloat(frame_details, View.ALPHA, 0.4f, 1f)
-            val translate = ofFloat(frame_details, View.TRANSLATION_Y, frame_details.height * 0.3f, 0f)
+        binding.frameDetails.onLaidOut {
+            val alpha = ObjectAnimator.ofFloat(binding.frameDetails, View.ALPHA, 0.4f, 1f)
+            val translate = ofFloat(binding.frameDetails, View.TRANSLATION_Y, binding.frameDetails.height * 0.3f, 0f)
 
             AnimatorSet().run {
                 playTogether(alpha, translate)
@@ -127,7 +130,7 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
-                        frame_master.isGone = true
+                        binding.frameMaster.isGone = true
                     }
                 })
                 start()
@@ -136,11 +139,11 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun animateOutFrameDetails() {
-        frame_master.isVisible = true
-        frame_details.onLaidOut {
-            if (frame_details.isShown) {
-                val alpha = ObjectAnimator.ofFloat(frame_details, View.ALPHA, 1f, 0f)
-                val translate = ofFloat(frame_details, View.TRANSLATION_Y, 0f, frame_details.height * 0.3f)
+        binding.frameMaster.isVisible = true
+        binding.frameDetails.onLaidOut {
+            if (binding.frameDetails.isShown) {
+                val alpha = ObjectAnimator.ofFloat(binding.frameDetails, View.ALPHA, 1f, 0f)
+                val translate = ofFloat(binding.frameDetails, View.TRANSLATION_Y, 0f, binding.frameDetails.height * 0.3f)
 
                 AnimatorSet().run {
                     playTogether(alpha, translate)
@@ -149,9 +152,9 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                     addListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator) {
                             super.onAnimationEnd(animation)
-                            frame_details.alpha = 1f
-                            frame_details.translationY = 0f
-                            frame_details.isGone = true
+                            binding.frameDetails.alpha = 1f
+                            binding.frameDetails.translationY = 0f
+                            binding.frameDetails.isGone = true
                         }
                     })
                     start()
