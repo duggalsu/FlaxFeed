@@ -4,13 +4,13 @@
     <plurals name="number_of_new_entries">
         <item quantity="other">새 항목 %d개</item>
     </plurals>
-    <string name="about_flym">플라임 정보</string>
+    <string name="about_flaxfeed">플라임 정보</string>
     <string name="welcome_title">플라임 사용을 환영합니다. 피드를 추가하시겠습니까?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">설정</string>
     <string name="menu_edit_feed">피드 편집</string>
     <string name="menu_all_read">모두 읽은 것으로 표시</string>
-    <string name="flym_feeds">플라임 피드</string>
+    <string name="flaxfeed_feeds">플라임 피드</string>
     <string name="error">오류</string>
     <string name="network_error">네트워크가 준비되지 않았습니다</string>
     <!-- FEEDS -->

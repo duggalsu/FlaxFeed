@@ -5,9 +5,9 @@
         <item quantity="one">Una entrada nova</item>
         <item quantity="other">%d noves entrades</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">Quant a Flym</string>
-    <string name="welcome_title">Benvingut a Flym. Voleu afegir un feed?</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">Quant a FlaxFeed</string>
+    <string name="welcome_title">Benvingut a FlaxFeed. Voleu afegir un feed?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Paràmetres</string>
     <string name="menu_edit_feed">Edita el canal</string>
@@ -16,7 +16,7 @@
     <string name="menu_enable_full_text_retrieval">Activa la recuperació de text complet</string>
     <string name="menu_disable_full_text_retrieval">Desactiva la recuperació de text complet</string>
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
-    <string name="flym_feeds">Canals de Flym</string>
+    <string name="flaxfeed_feeds">Canals de FlaxFeed</string>
     <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
     <string name="drawer_explanation">Benvingut! \n\nPremeu permanentment les fonts per veure les opcions ▼</string>

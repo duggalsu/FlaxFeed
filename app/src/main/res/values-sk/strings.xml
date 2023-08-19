@@ -7,14 +7,14 @@
         <item quantity="many">%d nových článkov</item>
         <item quantity="other">%d nových článkov</item>
     </plurals>
-    <string name="about_flym">O aplikácii Flym</string>
-    <string name="welcome_title">Vitajte v aplikácii Flym. Chcete pridať nový zdroj?</string>
+    <string name="about_flaxfeed">O aplikácii FlaxFeed</string>
+    <string name="welcome_title">Vitajte v aplikácii FlaxFeed. Chcete pridať nový zdroj?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Nastavenia</string>
     <string name="menu_edit_feed">Upraviť zdroj</string>
     <string name="menu_delete">Zmazať</string>
     <string name="menu_all_read">Označiť všetko ako prečítané</string>
-    <string name="flym_feeds">Flym zdroje</string>
+    <string name="flaxfeed_feeds">FlaxFeed zdroje</string>
     <string name="error">Chyba</string>
     <string name="network_error">Sieť nie je nastavená</string>
     <!-- FEEDS -->

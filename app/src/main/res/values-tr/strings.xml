@@ -5,9 +5,9 @@
         <item quantity="one">Yeni bir öğe</item>
         <item quantity="other">%d yeni öğe</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">Flym Hakkında</string>
-    <string name="welcome_title">Flym\'e hoşgeldiniz. Yayın eklemek ister misiniz?</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">FlaxFeed Hakkında</string>
+    <string name="welcome_title">FlaxFeed\'e hoşgeldiniz. Yayın eklemek ister misiniz?</string>
     <string name="cannot_find_feeds">Yayın bulunamadı</string>
     <string name="menu_settings">Ayarlar</string>
     <string name="menu_edit_feed">Yayını düzenle</string>
@@ -16,7 +16,7 @@
     <string name="menu_enable_full_text_retrieval">Tam metin olarak almayı etkinleştir</string>
     <string name="menu_disable_full_text_retrieval">Tam metin olarak almayı kapat</string>
     <string name="menu_all_read">Tümünü okundu olarak işaretle</string>
-    <string name="flym_feeds">Flym yayınları</string>
+    <string name="flaxfeed_feeds">FlaxFeed yayınları</string>
     <string name="error">Hata</string>
     <string name="network_error">Ağ kurulmadı</string>
     <string name="drawer_explanation">Merhaba!\n\nSeçenekleri görmek için yayına uzun basın ▼</string>

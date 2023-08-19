@@ -5,9 +5,9 @@
         <item quantity="one">Ein neuer Eintrag</item>
         <item quantity="other">%d neue Einträge</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">Über Flym</string>
-    <string name="welcome_title">Willkommen bei Flym. Willst du einen Feed hinzufügen?</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">Über FlaxFeed</string>
+    <string name="welcome_title">Willkommen bei FlaxFeed. Willst du einen Feed hinzufügen?</string>
     <string name="cannot_find_feeds">Keine Feeds gefunden</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_edit_feed">Feed bearbeiten</string>
@@ -16,7 +16,7 @@
     <string name="menu_enable_full_text_retrieval">Ganzen Text abrufen</string>
     <string name="menu_disable_full_text_retrieval">Nur Teaser abrufen</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
-    <string name="flym_feeds">Flym-Feeds</string>
+    <string name="flaxfeed_feeds">FlaxFeed-Feeds</string>
     <string name="error">Fehler</string>
     <string name="network_error">Kein Internet</string>
     <string name="drawer_explanation">Willkommen!\n\nLänger auf die Feeds drücken, um die Optionen zu sehen ▼</string>

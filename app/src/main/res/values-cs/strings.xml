@@ -7,8 +7,8 @@
         <item quantity="many">%d nových článků</item>
         <item quantity="other">%d nových článků</item>
     </plurals>
-    <string name="about_flym">O aplikaci Flym</string>
-    <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
+    <string name="about_flaxfeed">O aplikaci FlaxFeed</string>
+    <string name="welcome_title">Vítejte v aplikaci FlaxFeed. Chcete přidat nový zdroj?</string>
     <string name="cannot_find_feeds">Nebyly nalezeny žádné zdroje</string>
     <string name="menu_settings">Nastavení</string>
     <string name="menu_edit_feed">Upravit zdroj</string>
@@ -17,7 +17,7 @@
     <string name="menu_enable_full_text_retrieval">Povolit načítání celého textu</string>
     <string name="menu_disable_full_text_retrieval">Zakázat načítání celého textu</string>
     <string name="menu_all_read">Označit vše jako přečtené</string>
-    <string name="flym_feeds">Flym zdroje</string>
+    <string name="flaxfeed_feeds">FlaxFeed zdroje</string>
     <string name="error">Chyba</string>
     <string name="network_error">Síť není nastavena</string>
     <string name="drawer_explanation">Vítejte!\n\nDlouhým podržením zdroje zobrazite možnosti ▼</string>

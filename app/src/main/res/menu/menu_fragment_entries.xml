@@ -21,6 +21,6 @@
 
     <item
         android:id="@+id/menu_entries__about"
-        android:title="@string/about_flym"
+        android:title="@string/about_flaxfeed"
         app:showAsAction="never" />
 </menu>

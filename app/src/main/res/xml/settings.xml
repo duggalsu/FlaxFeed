@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:title="@string/settings_category_general">
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="DARK"
@@ -34,7 +34,7 @@
         android:title="@string/settings_category_article_appearance">
 
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -47,15 +47,15 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="display_images"
             android:summary="@string/settings_display_images_description"
             android:title="@string/settings_display_images" />
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="WIFI_ONLY_PRELOAD"
+            android:defaultValue="NEVER_DISPLAYED"
             android:dependency="display_images"
             android:entries="@array/settings_preload_image_modes"
             android:entryValues="@array/settings_preload_image_modes_values"
@@ -66,7 +66,7 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="open_browser_directly"
             android:summary="@string/open_browser_direct"
             android:title="@string/open_browser_direct_title" />
@@ -90,7 +90,7 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="display_thumbnails"
             android:summary="@string/settings_display_thumbnails_description"
             android:title="@string/settings_display_thumbnails" />
@@ -111,17 +111,17 @@
             android:summary="@string/settings_sort_order"
             android:title="@string/settings_sort_order_title" />
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="4"
+            android:defaultValue="7"
             android:entries="@array/settings_keep_times"
             android:entryValues="@array/settings_keep_time_values"
             android:inputType="number"
             android:key="keep_time"
             android:title="@string/settings_keep_time" />
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -156,12 +156,12 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="refresh_enabled"
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled" />
 
-        <net.frju.flym.ui.views.AutoSummaryListPreference
+        <com.duggalsu.flaxfeed.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="7200"
@@ -184,7 +184,7 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="refresh_on_startup"
             android:summary="@string/refresh_on_startup"
             android:title="@string/refresh_on_startup_title" />

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="net.frju.flym.App"
+        android:name="com.duggalsu.flaxfeed.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="false">
+        android:usesCleartextTraffic="false"
+        tools:targetApi="n">
         <activity
-            android:name="net.frju.flym.ui.main.MainActivity"
+            android:name="com.duggalsu.flaxfeed.ui.main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar"
@@ -87,9 +90,9 @@
                 <data android:scheme="rss" />
             </intent-filter>
             <intent-filter>
-                <action android:name="net.frju.flym.intent.UNREADS" />
-                <action android:name="net.frju.flym.intent.ALL" />
-                <action android:name="net.frju.flym.intent.FAVORITES" />
+                <action android:name="com.duggalsu.flaxfeed.intent.UNREADS" />
+                <action android:name="com.duggalsu.flaxfeed.intent.ALL" />
+                <action android:name="com.duggalsu.flaxfeed.intent.FAVORITES" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -99,26 +102,26 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name="net.frju.flym.ui.entrydetails.EntryDetailsActivity"
+            android:name="com.duggalsu.flaxfeed.ui.entrydetails.EntryDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="net.frju.flym.ui.feeds.FeedListEditActivity"
+            android:name="com.duggalsu.flaxfeed.ui.feeds.FeedListEditActivity"
             android:label="@string/feeds"
             android:launchMode="singleTask" />
         <activity
-            android:name="net.frju.flym.ui.about.AboutActivity"
-            android:label="@string/about_flym"
+            android:name="com.duggalsu.flaxfeed.ui.about.AboutActivity"
+            android:label="@string/about_flaxfeed"
             android:launchMode="singleTask" />
         <activity
-            android:name="net.frju.flym.ui.settings.SettingsActivity"
+            android:name="com.duggalsu.flaxfeed.ui.settings.SettingsActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name="net.frju.flym.ui.discover.DiscoverActivity"
+            android:name="com.duggalsu.flaxfeed.ui.discover.DiscoverActivity"
             android:label="@string/discover_search_label"
             android:launchMode="singleTask"
-            android:parentActivityName="net.frju.flym.ui.main.MainActivity" />
+            android:parentActivityName="com.duggalsu.flaxfeed.ui.main.MainActivity" />
 
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
@@ -127,7 +130,7 @@
             android:value="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="net.frju.flym.fileprovider"
+            android:authorities="com.duggalsu.flaxfeed.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -136,10 +139,10 @@
         </provider>
 
         <service
-            android:name="net.frju.flym.service.AutoRefreshJobService"
+            android:name="com.duggalsu.flaxfeed.service.AutoRefreshJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name="net.frju.flym.service.FetcherService" />
+        <service android:name="com.duggalsu.flaxfeed.service.FetcherService" />
     </application>
 
 </manifest>
