@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
-    <string name="about_flym">حول Flym</string>
-    <string name="welcome_title">مرحبا بكم في Flym. هل ترغب في إضافة نشرة إخبارية؟</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">حول FlaxFeed</string>
+    <string name="welcome_title">مرحبا بكم في FlaxFeed. هل ترغب في إضافة نشرة إخبارية؟</string>
     <string name="cannot_find_feeds">لم يتم العثور على أي خلاصات</string>
     <string name="menu_settings">الإعدادات</string>
     <string name="menu_edit_feed">تعديل الخلاصة</string>
@@ -12,7 +12,7 @@
     <string name="menu_enable_full_text_retrieval">تمكين استرجاع النص الكامل</string>
     <string name="menu_disable_full_text_retrieval">تعطيل استرجاع النص الكامل</string>
     <string name="menu_all_read">تحديد كمقروء</string>
-    <string name="flym_feeds">خلاصات Flym</string>
+    <string name="flaxfeed_feeds">خلاصات FlaxFeed</string>
     <string name="error">خطأ</string>
     <string name="network_error">لم يتم إعداد الشبكة</string>
     <string name="drawer_explanation">مرحباً!\n\nاضغط مطولاً على الخلاصات لمشاهدة الخيارات &lt;unk&gt;</string>

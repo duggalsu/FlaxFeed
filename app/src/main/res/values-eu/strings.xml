@@ -5,8 +5,8 @@
         <item quantity="one">Sarrera berri bat</item>
         <item quantity="other">%d sarrera berri</item>
     </plurals>
-    <string name="about_flym">Flymi buruz</string>
-    <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahi al zenuke?</string>
+    <string name="about_flaxfeed">FlaxFeedi buruz</string>
+    <string name="welcome_title">Ongi etorri FlaxFeedera. Jario bat gehitu nahi al zenuke?</string>
     <string name="cannot_find_feeds">Ez da jariorik aurkitu</string>
     <string name="menu_settings">Ezarpenak</string>
     <string name="menu_edit_feed">Jarioa editatu</string>
@@ -15,7 +15,7 @@
     <string name="menu_enable_full_text_retrieval">Testu osoa jasotzea gaitu</string>
     <string name="menu_disable_full_text_retrieval">Testu osoa jasotzea ezgaitu</string>
     <string name="menu_all_read">Markatu dena irakurrita bezala</string>
-    <string name="flym_feeds">Flymeko jarioak</string>
+    <string name="flaxfeed_feeds">FlaxFeedeko jarioak</string>
     <string name="error">Akatsa</string>
     <string name="network_error">Sarea ez dago konfiguratuta</string>
     <string name="drawer_explanation">Ongi etorri!\n\nSakatu luze jarioetan aukerak ikusteko ▼</string>

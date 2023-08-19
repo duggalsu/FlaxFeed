@@ -4,9 +4,9 @@
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 件の新しいエントリー</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">Flym について</string>
-    <string name="welcome_title">Flym へようこそ。フィードを追加しますか？</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">FlaxFeed について</string>
+    <string name="welcome_title">FlaxFeed へようこそ。フィードを追加しますか？</string>
     <string name="cannot_find_feeds">フィードが見つかりませんでした</string>
     <string name="menu_settings">設定</string>
     <string name="menu_edit_feed">フィードを編集</string>
@@ -15,7 +15,7 @@
     <string name="menu_enable_full_text_retrieval">全文の取得を有効にする</string>
     <string name="menu_disable_full_text_retrieval">全文の取得を無効にする</string>
     <string name="menu_all_read">すべて既読にする</string>
-    <string name="flym_feeds">Flym フィード</string>
+    <string name="flaxfeed_feeds">FlaxFeed フィード</string>
     <string name="error">エラー</string>
     <string name="network_error">ネットワークが設定されていません</string>
     <string name="drawer_explanation">ようこそ！\n\nフィードを長押しするとオプションが表示されます ▼</string>

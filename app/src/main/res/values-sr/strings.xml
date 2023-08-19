@@ -7,7 +7,7 @@
         <item quantity="other">Нових чланака: %d</item>
     </plurals>
     <string name="app_name">Флим</string>
-    <string name="about_flym">О Флиму</string>
+    <string name="about_flaxfeed">О Флиму</string>
     <string name="welcome_title">Добродошли у Флим. Да ли желите да додате нови довод?</string>
     <string name="cannot_find_feeds">Доводи нису пронађени</string>
     <string name="menu_settings">Подешавања</string>
@@ -17,7 +17,7 @@
     <string name="menu_enable_full_text_retrieval">Омогући преузимање комплетног текста</string>
     <string name="menu_disable_full_text_retrieval">Онемогући преузимање комплетног текста</string>
     <string name="menu_all_read">Означи све као прочитано</string>
-    <string name="flym_feeds">Флим доводи</string>
+    <string name="flaxfeed_feeds">Флим доводи</string>
     <string name="error">Грешка</string>
     <string name="network_error">Мрежа није подешена</string>
     <string name="drawer_explanation">Добродошли!\n\nЗа преглед опција, притисните и задржите жељени довод ▼</string>

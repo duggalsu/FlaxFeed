@@ -5,9 +5,9 @@
         <item quantity="one">Egy új bejegyzés</item>
         <item quantity="other">%d új bejegyzés</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">A Flym-ről</string>
-    <string name="welcome_title">Üdvözöljük a Flym-ben. Szeretne hozzáadni hírcsatornákat?</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">A FlaxFeed-ről</string>
+    <string name="welcome_title">Üdvözöljük a FlaxFeed-ben. Szeretne hozzáadni hírcsatornákat?</string>
     <string name="cannot_find_feeds">Nem található hírcsatorna</string>
     <string name="menu_settings">Beállítások</string>
     <string name="menu_edit_feed">Hírcsatorna szerkesztése</string>
@@ -16,7 +16,7 @@
     <string name="menu_enable_full_text_retrieval">A teljes szöveg lekeresésének engedélyezése</string>
     <string name="menu_disable_full_text_retrieval">A teljes szöveg lekeresésének letiltása</string>
     <string name="menu_all_read">Összes megjelölése olvasottként</string>
-    <string name="flym_feeds">Flym hírcsatornák</string>
+    <string name="flaxfeed_feeds">FlaxFeed hírcsatornák</string>
     <string name="error">Hiba</string>
     <string name="network_error">A hálózat nincs beállítva</string>
     <string name="drawer_explanation">Üdvözöljük\n\nHosszan nyomja meg a hírcsatornákat az opciók megtekintéséhez</string>

@@ -7,9 +7,9 @@
         <item quantity="many">%d новых записей</item>
         <item quantity="other">%d новых записей</item>
     </plurals>
-    <string name="app_name">Flym</string>
-    <string name="about_flym">О программе</string>
-    <string name="welcome_title">Добро пожаловать в Flym. Хотите добавить новую ленту?</string>
+    <string name="app_name">FlaxFeed</string>
+    <string name="about_flaxfeed">О программе</string>
+    <string name="welcome_title">Добро пожаловать в FlaxFeed. Хотите добавить новую ленту?</string>
     <string name="cannot_find_feeds">Ленты не найдены</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_edit_feed">Редактировать ленту</string>
@@ -18,7 +18,7 @@
     <string name="menu_enable_full_text_retrieval">Загружать текст полностью</string>
     <string name="menu_disable_full_text_retrieval">Не загружать текст полностью</string>
     <string name="menu_all_read">Пометить все как прочитанные</string>
-    <string name="flym_feeds">Flym ленты</string>
+    <string name="flaxfeed_feeds">FlaxFeed ленты</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
     <string name="drawer_explanation">Добро пожаловать!\n\nДолгое нажатие на ленте откроет дополнительные опции ▼</string>

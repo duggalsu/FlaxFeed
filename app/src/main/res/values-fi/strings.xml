@@ -5,8 +5,8 @@
         <item quantity="one">Yksi uusi artikkeli</item>
         <item quantity="other">%d uutta artikkelia</item>
     </plurals>
-    <string name="about_flym">Tietoja Flymista</string>
-    <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
+    <string name="about_flaxfeed">Tietoja FlaxFeedista</string>
+    <string name="welcome_title">Tervetuloa FlaxFeed:iin. Haluaisitko lisätä syötteen?</string>
     <string name="cannot_find_feeds">Syötteitä ei löydy</string>
     <string name="menu_settings">Asetukset</string>
     <string name="menu_edit_feed">Muokkaa syötettä</string>
@@ -15,7 +15,7 @@
     <string name="menu_enable_full_text_retrieval">Koko tekstin haku päälle</string>
     <string name="menu_disable_full_text_retrieval">Koko tekstin haku pois päältä</string>
     <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
-    <string name="flym_feeds">Flym-syötteet</string>
+    <string name="flaxfeed_feeds">FlaxFeed-syötteet</string>
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
