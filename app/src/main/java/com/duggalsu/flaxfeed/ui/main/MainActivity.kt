@@ -193,7 +193,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                     }
                                 }
                                 R.id.edit_feed -> {
-                                    binding_dialog_edit_feed = DialogEditFeedBinding.inflate(layoutInflater).apply {
+                                    binding_dialog_edit_feed = DialogEditFeedBinding.inflate(layoutInflater)
+                                    binding_dialog_edit_feed.apply {
                                         binding_dialog_edit_feed.feedName.setText(feedWithCount.feed.title)
                                         if (feedWithCount.feed.isGroup) {
                                             binding_dialog_edit_feed.feedLink.isGone = true
