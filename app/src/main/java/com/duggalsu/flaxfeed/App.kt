@@ -17,7 +17,6 @@
 
 package com.duggalsu.flaxfeed
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.os.Build
@@ -34,7 +33,6 @@ import java.util.concurrent.Executors
 class App : Application() {
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
         @JvmStatic
         lateinit var context: Context
             private set
@@ -47,13 +45,13 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        com.duggalsu.flaxfeed.App.Companion.context = applicationContext
-        com.duggalsu.flaxfeed.App.Companion.db = AppDatabase.createDatabase(com.duggalsu.flaxfeed.App.Companion.context)
+        context = applicationContext
+        db = AppDatabase.createDatabase(context)
 
-        com.duggalsu.flaxfeed.App.Companion.context.putPrefBoolean(PrefConstants.IS_REFRESHING, false) // init
+        context.putPrefBoolean(PrefConstants.IS_REFRESHING, false) // init
 
         // Enable strict mode to find performance issues in debug build
-        if (com.duggalsu.flaxfeed.BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
@@ -61,12 +59,12 @@ class App : Application() {
                     .build())
             val vmPolicy = VmPolicy.Builder().detectAll()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                vmPolicy.penaltyListener(Executors.newSingleThreadExecutor(), {
+                vmPolicy.penaltyListener(Executors.newSingleThreadExecutor()) {
                     // Hide UntaggedSocketViolations since they are useless and unfixable in okhttp and glide
                     if (it !is UntaggedSocketViolation) {
                         Log.d("StrictMode", "StrictMode policy violation: " + it.stackTrace)
                     }
-                })
+                }
             } else {
                 vmPolicy.penaltyLog()
             }

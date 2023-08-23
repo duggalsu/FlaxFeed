@@ -33,7 +33,7 @@ fun Context.getPrefBoolean(key: String, defValue: Boolean) =
 fun Context.putPrefBoolean(key: String, value: Boolean) =
         defaultSharedPreferences.edit { putBoolean(key, value) }
 
-
+/**
 fun Context.getPrefInt(key: String, defValue: Int) =
         defaultSharedPreferences.getInt(key, defValue)
 
@@ -45,10 +45,11 @@ fun Context.getPrefLong(key: String, defValue: Long) =
 
 fun Context.putPrefLong(key: String, value: Long) =
         defaultSharedPreferences.edit { putLong(key, value) }
-
+**/
 fun Context.getPrefString(key: String, defValue: String) =
         defaultSharedPreferences.getString(key, defValue)
 
+/**
 fun Context.putPrefString(key: String, value: String) =
         defaultSharedPreferences.edit { putString(key, value) }
 
@@ -60,6 +61,7 @@ fun Context.putPrefStringSet(key: String, value: MutableSet<String>) =
 
 fun Context.removePref(key: String) =
         defaultSharedPreferences.edit { remove(key) }
+**/
 
 fun Context.registerOnPrefChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
     try {
@@ -81,10 +83,10 @@ fun Context.showAlertDialog(
 ) {
     AlertDialog.Builder(this)
             .setTitle(title)
-            .setPositiveButton(android.R.string.yes) { _, _ ->
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 function()
             }
-            .setNegativeButton(android.R.string.no, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
 }
 

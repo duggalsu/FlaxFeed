@@ -146,11 +146,11 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                 AlertDialog.Builder(view.context)
                         .setTitle(item.name)
                         .setMessage(R.string.question_delete_feed)
-                        .setPositiveButton(android.R.string.yes) { _, _ ->
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
                             manageFeeds.deleteFeed(vw, item)
                             item.isAdded = false
                             feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
-                        }.setNegativeButton(android.R.string.no, null)
+                        }.setNegativeButton(android.R.string.cancel, null)
                         .show()
             } else {
                 feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
